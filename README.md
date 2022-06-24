@@ -5,12 +5,12 @@ To download collections of MathML documents, run:
     ./configure
     make
 
-The check_collection.py script allows to test a collection of MathML documents
+The `check_collection.py` script allows to test a collection of MathML documents
 and collect any errors. Read the help using
 
     python3 check_collection.py -h
 
-The download_mediawiki.sh script allows to download a specific MediaWiki page
+The `download_mediawiki.sh` script allows to download a specific MediaWiki page
 in the mediawiki/ subdirectory.
 
 ## Examples
