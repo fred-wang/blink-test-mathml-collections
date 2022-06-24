@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8"/>
+    <title>Legacy Layout forced in multicol</title>
+  </head>
+  <body>
+    <!-- https://bugs.chromium.org/p/chromium/issues/detail?id=1338882 -->
+    <div style="columns:2">
+      <div style="display: table; width: 50%; background: cyan;">
+        <math><mfrac><mn>1</mn><mn>2</mn></mfrac></math>
+      </div>
+      <div style="width: 50%; background: pink;">
+        <math><msqrt><mn>3</mn></msqrt></math>
+      </div>
+    </div>
+  </body>
+</html>

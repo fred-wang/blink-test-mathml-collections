@@ -1,0 +1,14 @@
+*.pyc
+*.stderr.txt
+*.stdout.txt
+*.tar.bz2
+*.zip
+Makefile
+Wiki_formulas_v0.1
+autom4te.cache
+config.log
+config.status
+download_mediawiki.sh
+nagdoc_27
+tmp*
+mediawiki/*.html

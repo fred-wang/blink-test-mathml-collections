@@ -1,0 +1,18 @@
+#!/bin/bash
+# Copyright (c) 2019 The Chromium Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+# This is just a helper to download a Mediawiki article and add CSS style to
+# the page so that MathML is rendered by the browser.
+if [ $# != 2 ]; then
+    echo "Usage: $0 WIKI_URL ARTICLE"
+    exit
+fi
+
+WIKI_URL=$1
+ARTICLE=$2
+echo "Downloading $WIKI_URL/$ARTICLE..."
+@CURL@ $WIKI_URL/api/rest_v1/page/html/$ARTICLE_transform | @SED@ \
+ "s|</head>|<style>.mwe-math-mathml-a11y { display: inline; }</style></head>|" \
+ > $ARTICLE.html

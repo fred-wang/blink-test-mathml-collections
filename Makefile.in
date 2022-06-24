@@ -1,0 +1,62 @@
+# Copyright (c) 2019-2022 Igalia S.L.
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+# 
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+# 
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+
+NAG_URL=https://www.nag.co.uk/numeric/nl/nagdoc_27/nagdoc_27.zip
+NTCIR_12_MATHIR_WIKI=https://www.cs.rit.edu/~rlaz/Wiki_formulas_v0.1.tar.bz2
+
+all: nagdoc_27 Wiki_formulas_v0.1
+
+clean:
+	rm -rf nagdoc_27 Wiki_formulas_v0.1
+
+distclean: clean
+	rm -rf __pycache__ mediawiki \
+	*.pyc \
+	*.stderr.txt \
+	*.stdout.txt \
+	*.tar.bz2 \
+	*.zip \
+	Makefile \
+	Wiki_formulas_v0.1 \
+	autom4te.cache \
+	config.log \
+	config.status \
+	download_mediawiki.sh \
+	nagdoc_27 \
+	tmp*
+
+nagdoc_27.zip:
+	@CURL@ -L $(NAG_URL) -o $@
+
+nagdoc_27: nagdoc_27.zip
+	@UNZIP@ $<
+	cd $@; @PATCH@ -p0 < ../nagdoc_27-for-native-mathml.patch
+	touch $@
+
+Wiki_formulas_v0.1.tar.bz2:
+	@CURL@ -L $(NTCIR_12_MATHIR_WIKI) -o $@
+
+Wiki_formulas_v0.1: Wiki_formulas_v0.1.tar.bz2
+	@TAR@ xvjf $<
+	for file in `find $@ -type f -name '*.html'`; do\
+		echo $$file; \
+		@SED@ -i 's|<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>||' $$file; \
+	done
+	touch $@
